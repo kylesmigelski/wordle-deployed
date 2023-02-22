@@ -80,6 +80,7 @@ function displayLetter(letter: string) {
   // only display the letter if it is in the alphabet, and we have not typed more than 5 letters
   if (letter.match(/[a-z]/i) && typedLetters.value.length < 5) {
     document.getElementsByClassName('box')[lettersGuessed.value].innerHTML = letter.toUpperCase();
+    document.getElementsByClassName('box')[lettersGuessed.value].style.outlineColor = '#565758';
     typedLetters.value.push(letter)
     lettersGuessed.value += 1
     pop();
@@ -94,8 +95,6 @@ function removeLastLetter() {
     lettersGuessed.value -= 1
   }
 }
-
-
 
 function CheckForWin(word: string) {
   // Check if the latest word is the same as the solution word. If so, the user wins and they can't submit any more words or letters
@@ -145,7 +144,7 @@ function flip(letters: string[]) {
       document.getElementsByClassName('box')[lettersGuessed.value - 5 + i].classList.add('flip')
       document.getElementsByClassName('box')[lettersGuessed.value - 5 + i].style.backgroundColor = letterColors.value[letters[i]]
       document.getElementsByClassName('box')[lettersGuessed.value - 5 + i].style.outlineColor = letterColors.value[letters[i]]
-    }, 400 * i)
+    }, 350 * i)
   }
 }
 
@@ -158,7 +157,7 @@ function winner() {
   for (let i = 0; i < 5; i++) {
     setTimeout(() => {
       document.getElementsByClassName('box')[lettersGuessed.value - 5 + i].classList.add('skip')
-    }, 400 * i)
+    }, 330 * i)
   }
 }
 
@@ -261,7 +260,7 @@ function winner() {
   }
   .flip{
     transform: rotateX(180deg) scale(1, -1);
-    transition: 0.6s;
+    transition: 0.5s;
     transform-style: preserve-3d;
     position: relative;
   }

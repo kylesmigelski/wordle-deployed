@@ -45,10 +45,6 @@ button {
   transition: border-color 0.25s;
 }
 
-button:hover {
-  background-color: rgba(58, 171, 80, 0.8);
-}
-
 #app {
   height: inherit;
   width: inherit;
