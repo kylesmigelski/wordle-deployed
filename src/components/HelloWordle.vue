@@ -146,7 +146,7 @@ function onPress(key: string) {
 
 
   <div style="justify-content: center">
-    
+
     <keyboard @key="onPress" :letterColors="letterColors" :key="onPress"/>
   </div>
 </template>
@@ -253,13 +253,22 @@ function onPress(key: string) {
       justify-content: center;
       align-items: center;
       margin-top: 10px;
-      height: 40px;
+      height: 35px;
       width: 100px;
       font-size: small;
       margin-right: 50px;
     }
     hr {
-      margin-bottom: 60px;
+      margin-bottom: 15px;
+    }
+    .field {
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      margin-bottom: 15px;
+    }
+    .header {
+      grid-template-rows: 38px;
     }
   }
 

@@ -109,7 +109,7 @@ function shadeKeyBoard(letter, color) {
 }
 @media (max-width: 768px) {
   #keyboard-cont {
-    margin: 80px 0;
+    margin: 0 0;
     display: flex;
     flex-direction: column;
     align-items: center;
