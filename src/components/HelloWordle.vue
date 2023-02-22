@@ -178,6 +178,7 @@ function onPress(key: string) {
     align-items: center;
     margin-top: 10px;
     margin-right: 100px;
+    color: white;
   }
 
   .field {

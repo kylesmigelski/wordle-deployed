@@ -89,6 +89,7 @@ function shadeKeyBoard(letter, color) {
 }
 
 .keyboard-button {
+  color: white;
   font-weight: bold;
   border: 0;
   padding: 0;
