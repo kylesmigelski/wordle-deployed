@@ -3,6 +3,7 @@
   line-height: 1.5;
   font-weight: 400;
 
+  touch-action: manipulation;
   color-scheme: dark;
   color: #fff;
   background-color: #121213;
@@ -46,11 +47,6 @@ button {
 
 button:hover {
   background-color: rgba(58, 171, 80, 0.8);
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
 #app {
