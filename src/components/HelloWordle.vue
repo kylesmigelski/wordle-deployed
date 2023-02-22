@@ -43,10 +43,6 @@ function addOneWord() {
     console.log(validWords.value)
     alert('Invalid word. Please try again.')
   }
-  //Clear input field
-  const empty = "";
-  var input = document.getElementById("guess");
-  input.value = empty;
 }
 
 function newGame() {
@@ -107,7 +103,7 @@ function CheckForWin(word: string) {
   if (solutionWord.value.join() === (word)) {
     allowInput = false
     // Change the color of the newgame button to green
-    document.getElementById("newgame").style.backgroundColor = "#538d4e";
+    document.getElementById("newgame")!.style.backgroundColor = "#538d4e";
   }
   // If the user has guessed 6 words, they lose
   else if(lettersGuessed.value == 30){
@@ -144,13 +140,14 @@ function onPress(key: string) {
 
   <div class="field">
     <div class="grid">
-      <div class="box" v-for="index in 30" :key="onPress"></div>
+      <div class="box" v-for="index in 30"></div>
     </div>
   </div>
 
 
   <div style="justify-content: center">
-    <keyboard @key="onPress" :letterColors="letterColors" />
+    
+    <keyboard @key="onPress" :letterColors="letterColors" :key="onPress"/>
   </div>
 </template>
 
