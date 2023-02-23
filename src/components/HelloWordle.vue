@@ -40,7 +40,6 @@ function addOneWord() {
     CheckForWin(word);
   }
   else {
-    console.log('shake')
     shake();
   }
 }
@@ -125,16 +124,10 @@ function onPress(key: string) {
 }
 
 function shake() {
-  // Shake the current row of letters
-  for (let i = 0; i < 5; i++) {
-    document.getElementsByClassName('box')[lettersGuessed.value - 1 - i].classList.add('shake')
-  }
-  // Remove the shake class after 500ms
+  document.getElementsByClassName('grid')[0].classList.add('shake')
   setTimeout(() => {
-    for (let i = 0; i < 5; i++) {
-      document.getElementsByClassName('box')[lettersGuessed.value - 1 - i].classList.remove('shake')
-    }
-  }, 500)
+    document.getElementsByClassName('grid')[0].classList.remove('shake')
+  }, 300)
 }
 
 function flip(letters: string[]) {
@@ -174,7 +167,7 @@ function winner() {
 
   <div class="field">
     <div class="grid">
-      <div class="box" v-for="index in 30"></div>
+      <div class="box" id="letter-boxes" v-for="index in 30"></div>
     </div>
   </div>
 
