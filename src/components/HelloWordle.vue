@@ -44,6 +44,11 @@ function addOneWord() {
   }
 }
 
+//click title to display solution
+function displaySolution() {
+  document.getElementById("title")!.innerHTML = solutionWord.value[0];
+}
+
 function newGame() {
   window.location.reload();
 }
@@ -161,7 +166,7 @@ function winner() {
 
 <template>
   <div class="header">
-    <h1 class="title" id="title" style="font-family: Anton,serif">Wordle Clone</h1>
+    <h1 @click="displaySolution" class="title" id="title" style="font-family: Anton,serif">Wordle Clone</h1>
     <button class="new-Button" @click="newGame" id="newgame" >New Game</button>
   </div>
 
