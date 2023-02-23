@@ -80,7 +80,6 @@ function displayLetter(letter: string) {
   // only display the letter if it is in the alphabet, and we have not typed more than 5 letters
   if (letter.match(/[a-z]/i) && typedLetters.value.length < 5) {
     document.getElementsByClassName('box')[lettersGuessed.value].innerHTML = letter.toUpperCase();
-    document.getElementsByClassName('box')[lettersGuessed.value].style.outlineColor = '#565758';
     typedLetters.value.push(letter)
     lettersGuessed.value += 1
     pop();
@@ -151,6 +150,10 @@ function flip(letters: string[]) {
 function pop() {
   // Pop the current letter
   document.getElementsByClassName('box')[lettersGuessed.value - 1].classList.add('pop')
+  // Remove the pop class after 350ms
+  setTimeout(() => {
+    document.getElementsByClassName('box')[lettersGuessed.value - 1].classList.remove('pop')
+  }, 300)
 }
 
 function winner() {
