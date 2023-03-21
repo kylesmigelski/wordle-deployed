@@ -90,10 +90,11 @@ h5 {
 button {
   margin-right: 15px;
 }
-@media (max-width: 920px) {
+@media screen and (max-height: 700px), screen and (max-width: 720px){
   .navbar{
     margin-bottom: 15px;
     padding: 0 5px;
+    height: 49px;
   }
   h1 {
     font-size: 1.2rem;
