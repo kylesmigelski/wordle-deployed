@@ -1,7 +1,20 @@
 <script setup lang="ts">
-import {onBeforeMount, onUnmounted, ref, Ref, watch} from 'vue'
+import {computed, onBeforeMount, onMounted, ref, Ref} from 'vue'
 import Keyboard from "./keyboard.vue";
 import '@fontsource/anton';
+import {addDoc, collection, getFirestore} from "@firebase/firestore";
+import store  from './store'
+
+// get username from vuex store
+const username = computed(() => {
+  return store.getters.getUsername
+})
+const userID = computed(() => {
+  return store.getters.getUserID
+})
+
+const db = getFirestore();
+const gameStatistics = collection(db, "gameStatistics");
 
 const userWords: Ref<string[]> = ref([])
 const solutionWord: Ref<string[]> = ref([])
@@ -9,6 +22,10 @@ const validWords: Ref<string[]> = ref([])
 const lettersGuessed: Ref<number> = ref(0)
 const typedLetters: Ref<string[]> = ref([])
 const letterColors: Ref<Record<string, string>> = ref({})
+let timeStart = new Date().getTime();
+
+// Store the solution word in the vuex store
+
 
 // Load the list of solutions from the txt file and choose a random one
 onBeforeMount( async () => {
@@ -18,8 +35,9 @@ onBeforeMount( async () => {
 
   // Choose a random word from the list and add it to solutionWord
   const randomWord = wordsArray[Math.floor(Math.random() * wordsArray.length)];
-  solutionWord.value.push(randomWord)
-  console.log(solutionWord.value)
+  solutionWord.value.push(randomWord);
+  store.commit('setSolutionWord', solutionWord.value[0]);
+  console.log("Solution: ", solutionWord.value[0]);
 })
 
 // Load the list of valid words from the txt file
@@ -40,6 +58,7 @@ function addOneWord() {
     CheckForWin(word);
   }
   else {
+    console.log("invalid word: " + word)
     shake();
   }
 }
@@ -56,7 +75,6 @@ function newGame() {
 function displayWord(word: string) {
   lettersGuessed.value -= 5
   typedLetters.value = []
-  const colors = []
   const letters = word.split('')
   for (let i = 0; i < letters.length; i++) {
 
@@ -104,11 +122,12 @@ function CheckForWin(word: string) {
   if (solutionWord.value.join() === (word)) {
     allowInput = false
     // Change the color of the newgame button to green
-    document.getElementById("newgame")!.style.backgroundColor = "#538d4e";
     winner();
+    storeGameStats("won");
   }
   // If the user has guessed 6 words, they lose
   else if(lettersGuessed.value == 30){
+    storeGameStats("lost");
     alert('You lose. The answer was: '+ solutionWord.value);
     allowInput = false
   }
@@ -162,14 +181,27 @@ function winner() {
   }
 }
 
+// store the game stats in the firestore document
+async function storeGameStats(gameResult: string) {
+  try {
+    const docRef = await addDoc(gameStatistics, {
+      userID: userID.value,
+      username: username.value,
+      secretWord: solutionWord.value[0],
+      gameResult: gameResult,
+      score: lettersGuessed.value / 5,
+      time: Math.ceil((new Date().getTime() - timeStart) / 1000) + 's',
+      date: new Date()
+    })
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+}
+
 </script>
 
 <template>
-  <div class="header">
-    <h1 @click="displaySolution" class="title" id="title" style="font-family: Anton,serif">Wordle Clone</h1>
-    <button class="new-Button" @click="newGame" id="newgame" >New Game</button>
-  </div>
-
   <div class="field">
     <div class="grid">
       <div class="box" id="letter-boxes" v-for="index in 30"></div>
@@ -177,7 +209,6 @@ function winner() {
   </div>
 
   <div style="justify-content: center">
-
     <keyboard @key="onPress" :letterColors="letterColors" :key="onPress"/>
   </div>
 </template>
@@ -191,34 +222,11 @@ function winner() {
     grid-row-gap: 10px;
   }
 
-  .header {
-    display: grid;
-    grid-area: header;
-    justify-content: space-evenly;
-    justify-items: center;
-    align-content: space-evenly;
-    align-items: center;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: 60px;
-    border-bottom: #3a3a3c 1px solid;
-    margin-bottom: 20px;
-  }
-
-  .title { grid-area: 1 / 3 / 2 / 4;
-    margin-top: 30px;
-  }
-  .new-Button { grid-area: 1 / 5 / 2 / 6;
-    justify-content: center;
-    align-items: center;
-    margin-right: 100px;
-    color: white;
-  }
-
   .field {
     justify-content: center;
     align-items: center;
     display: flex;
-    margin-bottom: 25px;
+    margin-bottom: 60px;
   }
 
   input[type=text] {
@@ -365,7 +373,7 @@ function winner() {
       font-size: x-large;
       margin-top: 20px;
     }
-    .new-Button { grid-area: 1 / 5 / 2 / 6;
+    .nav-button { grid-area: 1 / 0 / 2 / 6;
       height: 30px;
       width: 100px;
       font-size: small;
