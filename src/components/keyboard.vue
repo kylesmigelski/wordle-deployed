@@ -138,6 +138,9 @@ function shadeKeyBoard(letter, color) {
     width: 33px;
     margin: 0 4px 4px 0;
   }
+  .keyboard-button:hover {
+    background-color: gray;
+  }
   .big-key {
     width: 50px;
     font-size: 75%;
