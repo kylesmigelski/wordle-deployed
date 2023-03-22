@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {computed, ref, Ref} from "vue";
-import Statistics from "./components/statistics.vue";
+import {computed, ref, watch} from "vue";
+import router from "./components/router";
 import store  from './components/store'
 
 const username = computed(() => {
@@ -9,9 +9,6 @@ const username = computed(() => {
 const displayUsername = computed(() => {
   return store.getters.getDisplayUsername
 })
-const userID = computed(() => {
-  return store.getters.getUserID
-})
 const solutionWord = computed(() => {
   return store.getters.getSolutionWord
 })
@@ -19,7 +16,6 @@ const gameOver = computed(() => {
   return store.getters.getGameOver
 })
 
-let showModalStatistics: Ref<boolean> = gameOver.value ? ref(true) : ref(false)
 const title = ref("Wordle clone")
 
 function newGame() {
@@ -30,9 +26,13 @@ function revealWord() {
   title.value = solutionWord.value;
 }
 
-function showStatisticsModal() {
-  showModalStatistics.value = true
-}
+// add watch for gameOver that pushes /statistics to router
+watch(gameOver, (newVal) => {
+  if (newVal && username.value !== "") {
+    setTimeout(() => {
+      router.push('/statistics')
+    }, 3000)
+  }})
 
 </script>
 
@@ -40,10 +40,6 @@ function showStatisticsModal() {
   <nav class="navbar">
     <div class="navbar-left">
       <button @click="newGame">New Game</button>
-
-<!--      <div v-show="showModalStatistics" @close="showModalStatistics = false;" >
-        <statistics :user-id="userID" :show-modal-statistic="showModalStatistics" @close="showModalStatistics = false"></statistics>
-      </div>-->
     </div>
     <div class="navbar-center">
       <h1 @click="revealWord" v-text="title"></h1>
@@ -117,7 +113,6 @@ button {
     height: 35px;
     width: 65px;
     font-size: x-small;
-    margin-right: 5px;
   }
 }
 

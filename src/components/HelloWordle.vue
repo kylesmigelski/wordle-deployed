@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, onBeforeMount, onMounted, ref, Ref} from 'vue'
+import {computed, onBeforeMount, ref, Ref} from 'vue'
 import Keyboard from "./keyboard.vue";
 import '@fontsource/anton';
 import {addDoc, collection, getFirestore} from "@firebase/firestore";
@@ -23,9 +23,6 @@ const lettersGuessed: Ref<number> = ref(0)
 const typedLetters: Ref<string[]> = ref([])
 const letterColors: Ref<Record<string, string>> = ref({})
 let timeStart = new Date().getTime();
-
-// Store the solution word in the vuex store
-
 
 // Load the list of solutions from the txt file and choose a random one
 onBeforeMount( async () => {
@@ -61,15 +58,6 @@ function addOneWord() {
     console.log("invalid word: " + word)
     shake();
   }
-}
-
-//click title to display solution
-function displaySolution() {
-  document.getElementById("title")!.innerHTML = solutionWord.value[0];
-}
-
-function newGame() {
-  window.location.reload();
 }
 
 function displayWord(word: string) {
@@ -369,26 +357,10 @@ async function storeGameStats(gameResult: string) {
     h1 {
       font-size: 1.5rem;
     }
-    .title { grid-area: 1 / 3 / 2 / 4;
-      width: 150px;
-      font-size: x-large;
-      margin-top: 20px;
-    }
-    .nav-button { grid-area: 1 / 0 / 2 / 6;
-      height: 30px;
-      width: 100px;
-      font-size: small;
-      margin-right: 50px;
-      padding: 0;
-    }
     .field {
       justify-content: center;
       align-items: center;
       display: flex;
-      margin-bottom: 15px;
-    }
-    .header {
-      grid-template-rows: 48px;
       margin-bottom: 15px;
     }
   }

@@ -31,15 +31,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed } from "vue";
+import { defineComponent, computed } from "vue";
 import store  from './store'
 
 import{ collection, getDocs } from "firebase/firestore"
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "@firebase/app";
 import {getFirestore, Firestore} from "@firebase/firestore";
-import { getAnalytics } from "@firebase/analytics";
-import { getAuth  } from '@firebase/auth';
 import HelloWordle from "./HelloWordle.vue";
 
 const firebaseConfig = {
@@ -55,8 +52,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db:Firestore = getFirestore(app);
-const analytics = getAnalytics(app);
-const auth = getAuth(app);
 const gameStatistics: any[] = [];
 
 const displayUsername = computed(() => {
@@ -125,13 +120,6 @@ export default defineComponent({
       console.log(this.gameStatistics)
     },
 },
-  watch: {
-    showModalStatistic: function (show: boolean) {
-      if (show) {
-        this.getGameStatistics();
-      }
-    },
-  }
 });
 
 </script>
