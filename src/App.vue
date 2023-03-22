@@ -16,7 +16,7 @@ const gameOver = computed(() => {
   return store.getters.getGameOver
 })
 
-const title = ref("Wordle clone")
+const title = ref("Wordle Clone")
 
 function newGame() {
  window.location.reload();

@@ -122,7 +122,7 @@ function shadeKeyBoard(letter, color) {
   width: 65.4px;
   font-size: 75%;
 }
-@media screen and (max-height: 700px), screen and (max-width: 720px){
+@media screen and (max-height: 780px), screen and (max-width: 720px){
   #keyboard-cont {
     margin: 0 0;
     display: flex;

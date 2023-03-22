@@ -353,7 +353,7 @@ async function storeGameStats(gameResult: string) {
     }
   }
 
-  @media (max-width: 920px) {
+  @media screen and (max-height: 700px), screen and (max-width: 720px){
     h1 {
       font-size: 1.5rem;
     }
