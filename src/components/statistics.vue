@@ -1,8 +1,10 @@
 <template>
-  <div class="modal" >
-    <div class = "container">
+  <HelloWordle />
+  <div class="modal" @click="closeModal">
+    <div class = "container" @click.stop @submit.prevent>
       <h2>Game history for {{ displayUsername }}<br></h2>
-    <table class="game-table">
+      <div v-if="isLoading"><h3>Loading...</h3></div>
+    <table v-if="!isLoading" class="game-table">
       <tr>
         <th>Game</th>
         <th>Date</th>
@@ -20,10 +22,10 @@
         <td>{{document.gameResult}}</td>
       </tr>
     </table>
-      <button @click="closeModal">Close</button>
       <button @click="sortByDuration">Sort by duration</button>
       <button @click="sortByScore">Sort by score</button>
       <button @click="sortByDate">Sort by date</button>
+      <button type="button" @click="closeModal">Close</button>
     </div>
   </div>
 </template>
@@ -38,6 +40,7 @@ import { initializeApp } from "@firebase/app";
 import {getFirestore, Firestore} from "@firebase/firestore";
 import { getAnalytics } from "@firebase/analytics";
 import { getAuth  } from '@firebase/auth';
+import HelloWordle from "./HelloWordle.vue";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCQm1cPSv2TByJ7qmwTuRWMPhNj6aKZl7Y",
@@ -59,6 +62,9 @@ const gameStatistics: any[] = [];
 const displayUsername = computed(() => {
   return store.getters.getDisplayUsername
 })
+const userID = computed(() => {
+  return store.getters.getUserID
+})
 
 interface GameStatistic {
   date: string;
@@ -71,36 +77,35 @@ interface GameStatistic {
 
 export default defineComponent({
   name: 'Statistics',
-  props: {
-    showModalStatistic: {
-      type: Boolean as PropType<boolean>,
-      required: true
-    },
-    userId: {
-      type: String as PropType<string>,
-      required: true
-    }
-  },
+  components: {HelloWordle},
   data() {
     return {
+      isLoading: false,
       gameStatistics: [] as GameStatistic[],
       displayUsername: displayUsername.value,
+      userID: userID.value
     };
+  },
+  mounted() {
+    this.getGameStatistics();
   },
   methods: {
     closeModal() {
-      this.$emit("close");
+      this.$router.push({ name: "Home" });
     },
     async getGameStatistics() {
+      this.isLoading = true;
       const querySnapshot = await getDocs(collection(db, "gameStatistics"));
       // filter the game statistics by the user id
       const filteredGameStatistics: GameStatistic[] = [];
       querySnapshot.forEach((doc) => {
-        if (doc.data().userID === this.userId) {
+        if (doc.data().userID === userID.value) {
           filteredGameStatistics.push(doc.data() as GameStatistic);
         }
       });
       this.gameStatistics = filteredGameStatistics;
+      this.sortByDate();
+      this.isLoading = false;
     },
     sortByDuration() {
       this.gameStatistics.sort((a, b) => {
@@ -115,7 +120,7 @@ export default defineComponent({
     },
     sortByDate() {
       this.gameStatistics.sort((a, b) => {
-       return a.date.seconds * 1000 - b.date.seconds * 1000
+       return b.date.seconds * 1000 - a.date.seconds * 1000
       });
       console.log(this.gameStatistics)
     },
@@ -184,7 +189,10 @@ input[type="password"] {
   border: 1px solid #ccc;
   border-radius: 3px;
 }
-
+button[type="button"] {
+  background-color: #f44336;
+  color: white;
+}
 button {
   margin-top: 15px;
   margin-right: 10px;

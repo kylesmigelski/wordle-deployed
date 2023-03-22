@@ -179,6 +179,7 @@ function winner() {
       document.getElementsByClassName('box')[lettersGuessed.value - 5 + i].classList.add('skip')
     }, 330 * i)
   }
+  store.commit('setGameOver', true)
 }
 
 // store the game stats in the firestore document

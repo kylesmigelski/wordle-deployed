@@ -5,6 +5,7 @@ export interface State {
     displayUsername: string;
     userID: string;
     solutionWord: string;
+    gameOver: boolean;
 }
 
 export default createStore<State>({
@@ -13,6 +14,7 @@ export default createStore<State>({
         displayUsername: '',
         userID: '',
         solutionWord: '',
+        gameOver: false
     },
     mutations: {
         setUsername(state, payload: string) {
@@ -26,6 +28,9 @@ export default createStore<State>({
         },
         setSolutionWord(state, payload: string) {
             state.solutionWord = payload;
+        },
+        setGameOver(state, payload: boolean) {
+            state.gameOver = payload;
         }
     },
     actions: {
@@ -40,6 +45,9 @@ export default createStore<State>({
         },
         setSolutionWord({ commit }, payload: string) {
             commit('setSolutionWord', payload);
+        },
+        setGameOver({ commit }, payload: boolean) {
+            commit('setGameOver', payload);
         }
     },
     getters: {
@@ -54,6 +62,9 @@ export default createStore<State>({
         },
         getSolutionWord(state) {
             return state.solutionWord;
+        },
+        getGameOver(state) {
+            return state.gameOver;
         }
     },
 });
